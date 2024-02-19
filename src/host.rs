@@ -1,9 +1,7 @@
 use std::{marker::PhantomData, mem::MaybeUninit, sync::Arc};
 
 use enet_sys::{
-    enet_host_bandwidth_limit, enet_host_channel_limit, enet_host_check_events, enet_host_connect,
-    enet_host_destroy, enet_host_flush, enet_host_service, ENetHost, ENetPeer,
-    ENET_PROTOCOL_MAXIMUM_CHANNEL_COUNT,
+    enet_host_bandwidth_limit, enet_host_channel_limit, enet_host_check_events, enet_host_compress_with_range_coder, enet_host_connect, enet_host_destroy, enet_host_flush, enet_host_service, enet_range_coder_compress, ENetHost, ENetPeer, ENET_PROTOCOL_MAXIMUM_CHANNEL_COUNT
 };
 
 use crate::{Address, EnetKeepAlive, Error, Event, Peer};
@@ -98,6 +96,13 @@ impl<T> Host<T> {
                 incoming_bandwith.to_enet_u32(),
                 outgoing_bandwidth.to_enet_u32(),
             );
+        }
+    }
+
+    /// Enables compression with the adaptive order-2 PPM range coder
+    pub fn compress_with_range_coder(&mut self) {
+        unsafe {
+            enet_host_compress_with_range_coder(self.inner);
         }
     }
 
