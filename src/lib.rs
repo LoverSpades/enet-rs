@@ -153,7 +153,7 @@ impl Enet {
     pub fn create_host<T>(
         &self,
         address: Option<&Address>,
-        max_peer_count: enet_sys::size_t,
+        max_peer_count: usize,
         max_channel_count: ChannelLimit,
         incoming_bandwidth: BandwidthLimit,
         outgoing_bandwidth: BandwidthLimit,

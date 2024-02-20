@@ -58,7 +58,7 @@ impl PacketMode {
 impl Packet {
     /// Creates a new Packet with optional reliability settings.
     pub fn new(data: &[u8], mode: PacketMode) -> Result<Packet, Error> {
-        let data_len: enet_sys::size_t = data
+        let data_len: usize = data
             .len()
             .try_into()
             // this can only happen on 64-bit systems if `size_t` is 32-bit wide (windows?)
