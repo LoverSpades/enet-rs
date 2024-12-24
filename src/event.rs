@@ -12,7 +12,10 @@ use crate::{Packet, Peer};
 pub enum Event<'a, T> {
     /// This variant represents the connection of a peer, contained in the only
     /// field.
-    Connect(Peer<'a, T>),
+    ///
+    /// The connected peer is contained in the first field, while the second
+    /// field contains the user-specified data for this connection.
+    Connect(Peer<'a, T>, u32),
     /// This variant represents the disconnection of a peer, either because it
     /// was requested or due to a timeout.
     ///
@@ -36,7 +39,7 @@ impl<'a, T> Event<'a, T> {
         match event_sys.type_ {
             _ENetEventType_ENET_EVENT_TYPE_NONE => None,
             _ENetEventType_ENET_EVENT_TYPE_CONNECT => {
-                Some(Event::Connect(Peer::new(event_sys.peer)))
+                Some(Event::Connect(Peer::new(event_sys.peer), event_sys.data))
             }
             _ENetEventType_ENET_EVENT_TYPE_DISCONNECT => {
                 Some(Event::Disconnect(Peer::new(event_sys.peer), event_sys.data))
